@@ -107,7 +107,8 @@ std::optional<Dish> SqliteKitchenRepository::findDishByName(const std::string& n
 
 std::vector<Dish> SqliteKitchenRepository::findAllDishes() {
     const char* sql =
-        "SELECT id, name, prep_time_minutes, cooking_method, station, is_available FROM items;";
+        "SELECT id, name, prep_time_minutes, cooking_method, station, is_available "
+        "FROM items WHERE station != '' AND cooking_method != '';";
     sqlite3_stmt* stmt = nullptr;
     if (sqlite3_prepare_v2(db_.handle(), sql, -1, &stmt, nullptr) != SQLITE_OK) {
         throw std::runtime_error(std::string("findAllDishes prepare: ") + sqlite3_errmsg(db_.handle()));
