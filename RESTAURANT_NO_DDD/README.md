@@ -72,7 +72,7 @@ ctest --output-on-failure
 
 ## Docker
 
-From the `docs/` directory:
+From the `../docker/` directory:
 
 ```bash
 docker compose -f docker/docker-compose.yml up
