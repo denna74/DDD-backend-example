@@ -1,0 +1,473 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-04-13T00:00:00.000Z",
+  "__export_source": "restaurant_ddd",
+  "resources": [
+    {
+      "_id": "wrk_restaurant_ddd",
+      "_type": "workspace",
+      "name": "Restaurant DDD API",
+      "description": "API collection for the Restaurant DDD backend - Kitchen, Floor, and Finance contexts",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "name": "Base Environment",
+      "parentId": "wrk_restaurant_ddd",
+      "data": {
+        "base_url": "http://localhost:8082"
+      }
+    },
+    {
+      "_id": "grp_kitchen",
+      "_type": "request_group",
+      "name": "Kitchen",
+      "description": "Kitchen context - dishes, fire orders, and cooking stations",
+      "parentId": "wrk_restaurant_ddd"
+    },
+    {
+      "_id": "grp_kitchen_dishes",
+      "_type": "request_group",
+      "name": "Dishes",
+      "parentId": "grp_kitchen"
+    },
+    {
+      "_id": "req_kitchen_dishes_list",
+      "_type": "request",
+      "name": "List All Dishes",
+      "parentId": "grp_kitchen_dishes",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/kitchen/dishes",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_kitchen_dishes_create",
+      "_type": "request",
+      "name": "Create Dish",
+      "parentId": "grp_kitchen_dishes",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/kitchen/dishes",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Grilled Salmon\",\n  \"prepTimeMinutes\": 20,\n  \"cookingMethod\": \"grill\",\n  \"station\": \"grill\"\n}"
+      }
+    },
+    {
+      "_id": "req_kitchen_dishes_out_of_stock",
+      "_type": "request",
+      "name": "Mark Dish Out of Stock",
+      "parentId": "grp_kitchen_dishes",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/kitchen/dishes/:id/out-of-stock",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "DISH_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_kitchen_dishes_restore",
+      "_type": "request",
+      "name": "Restore Dish Availability",
+      "parentId": "grp_kitchen_dishes",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/kitchen/dishes/:id/restore",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "DISH_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "grp_kitchen_fire_orders",
+      "_type": "request_group",
+      "name": "Fire Orders",
+      "parentId": "grp_kitchen"
+    },
+    {
+      "_id": "req_kitchen_fire_orders_list",
+      "_type": "request",
+      "name": "List All Fire Orders",
+      "parentId": "grp_kitchen_fire_orders",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/kitchen/fire-orders",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_kitchen_fire_orders_get",
+      "_type": "request",
+      "name": "Get Fire Order by ID",
+      "parentId": "grp_kitchen_fire_orders",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/kitchen/fire-orders/:id",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "FIRE_ORDER_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_kitchen_fire_orders_create",
+      "_type": "request",
+      "name": "Create Fire Order",
+      "parentId": "grp_kitchen_fire_orders",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/kitchen/fire-orders",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"tableNumber\": 5,\n  \"dishes\": [\n    { \"dishId\": \"DISH_ID_HERE\", \"fireAtOffsetMinutes\": 0 },\n    { \"dishId\": \"DISH_ID_HERE\", \"fireAtOffsetMinutes\": 10 }\n  ]\n}"
+      }
+    },
+    {
+      "_id": "req_kitchen_fire_orders_fire_line",
+      "_type": "request",
+      "name": "Fire a Dish (Start Cooking)",
+      "parentId": "grp_kitchen_fire_orders",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/kitchen/fire-orders/:id/lines/:lineId/fire",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "FIRE_ORDER_ID_HERE" },
+        { "name": "lineId", "value": "LINE_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_kitchen_fire_orders_plate_line",
+      "_type": "request",
+      "name": "Plate a Dish (Finish Cooking)",
+      "parentId": "grp_kitchen_fire_orders",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/kitchen/fire-orders/:id/lines/:lineId/plate",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "FIRE_ORDER_ID_HERE" },
+        { "name": "lineId", "value": "LINE_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "grp_floor",
+      "_type": "request_group",
+      "name": "Floor",
+      "description": "Floor context - tables, menu items, seating, and covers",
+      "parentId": "wrk_restaurant_ddd"
+    },
+    {
+      "_id": "grp_floor_tables",
+      "_type": "request_group",
+      "name": "Tables",
+      "parentId": "grp_floor"
+    },
+    {
+      "_id": "req_floor_tables_list",
+      "_type": "request",
+      "name": "List All Tables",
+      "parentId": "grp_floor_tables",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/floor/tables",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_floor_tables_create",
+      "_type": "request",
+      "name": "Add Table",
+      "parentId": "grp_floor_tables",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/floor/tables",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"table_number\": 1,\n  \"capacity\": 4\n}"
+      }
+    },
+    {
+      "_id": "req_floor_tables_seat_walkin",
+      "_type": "request",
+      "name": "Seat Walk-In Party",
+      "parentId": "grp_floor_tables",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/floor/tables/:id/seat-walk-in",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "TABLE_ID_HERE" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"party_size\": 3\n}"
+      }
+    },
+    {
+      "_id": "req_floor_tables_seat_reservation",
+      "_type": "request",
+      "name": "Seat Reservation",
+      "parentId": "grp_floor_tables",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/floor/tables/:id/seat-reservation",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "TABLE_ID_HERE" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"party_size\": 2,\n  \"reservation_name\": \"Smith\"\n}"
+      }
+    },
+    {
+      "_id": "req_floor_tables_turn",
+      "_type": "request",
+      "name": "Turn Table",
+      "parentId": "grp_floor_tables",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/floor/tables/:id/turn",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "TABLE_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "grp_floor_menu_items",
+      "_type": "request_group",
+      "name": "Menu Items",
+      "parentId": "grp_floor"
+    },
+    {
+      "_id": "req_floor_menu_items_list",
+      "_type": "request",
+      "name": "List All Menu Items",
+      "parentId": "grp_floor_menu_items",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/floor/menu-items",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_floor_menu_items_create",
+      "_type": "request",
+      "name": "Add Menu Item",
+      "parentId": "grp_floor_menu_items",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/floor/menu-items",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Caesar Salad\",\n  \"description\": \"Romaine lettuce with house Caesar dressing\",\n  \"price_cents\": 1200\n}"
+      }
+    },
+    {
+      "_id": "req_floor_menu_items_update",
+      "_type": "request",
+      "name": "Update Menu Item",
+      "parentId": "grp_floor_menu_items",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/api/floor/menu-items/:id",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "MENU_ITEM_ID_HERE" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Caesar Salad\",\n  \"description\": \"Romaine lettuce with house Caesar dressing and croutons\",\n  \"price_cents\": 1400\n}"
+      }
+    },
+    {
+      "_id": "req_floor_menu_items_sold_out",
+      "_type": "request",
+      "name": "Mark Menu Item as Sold Out",
+      "parentId": "grp_floor_menu_items",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/floor/menu-items/:id/sold-out",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "MENU_ITEM_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "grp_floor_covers",
+      "_type": "request_group",
+      "name": "Covers",
+      "parentId": "grp_floor"
+    },
+    {
+      "_id": "req_floor_covers_tonight",
+      "_type": "request",
+      "name": "Tonight's Covers Count",
+      "parentId": "grp_floor_covers",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/floor/covers/tonight",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "grp_finance",
+      "_type": "request_group",
+      "name": "Finance",
+      "description": "Finance context - cost items, waste tracking, and financial reports",
+      "parentId": "wrk_restaurant_ddd"
+    },
+    {
+      "_id": "grp_finance_cost_items",
+      "_type": "request_group",
+      "name": "Cost Items",
+      "parentId": "grp_finance"
+    },
+    {
+      "_id": "req_finance_cost_items_list",
+      "_type": "request",
+      "name": "List All Cost Items",
+      "parentId": "grp_finance_cost_items",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/finance/cost-items",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_finance_cost_items_create",
+      "_type": "request",
+      "name": "Add Cost Item",
+      "parentId": "grp_finance_cost_items",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/finance/cost-items",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Salmon Fillet\",\n  \"ingredient_cost_cents\": 800,\n  \"supplier_price_cents\": 1000,\n  \"selling_price_cents\": 2800\n}"
+      }
+    },
+    {
+      "_id": "req_finance_cost_items_update",
+      "_type": "request",
+      "name": "Update Cost Item Pricing",
+      "parentId": "grp_finance_cost_items",
+      "method": "PUT",
+      "url": "{{ _.base_url }}/api/finance/cost-items/:id",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "COST_ITEM_ID_HERE" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"ingredient_cost_cents\": 850,\n  \"supplier_price_cents\": 1100\n}"
+      }
+    },
+    {
+      "_id": "req_finance_cost_items_margin",
+      "_type": "request",
+      "name": "Get Cost Item Margin",
+      "parentId": "grp_finance_cost_items",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/finance/cost-items/:id/margin",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "parameters": [
+        { "name": "id", "value": "COST_ITEM_ID_HERE" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "grp_finance_waste",
+      "_type": "request_group",
+      "name": "Waste",
+      "parentId": "grp_finance"
+    },
+    {
+      "_id": "req_finance_waste_list",
+      "_type": "request",
+      "name": "List All Waste Records",
+      "parentId": "grp_finance_waste",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/finance/waste",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    },
+    {
+      "_id": "req_finance_waste_create",
+      "_type": "request",
+      "name": "Record Waste Event",
+      "parentId": "grp_finance_waste",
+      "method": "POST",
+      "url": "{{ _.base_url }}/api/finance/waste",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"cost_item_id\": \"COST_ITEM_ID_HERE\",\n  \"quantity\": 2.5,\n  \"unit\": \"kg\",\n  \"reason\": \"Spoilage - expired delivery\"\n}"
+      }
+    },
+    {
+      "_id": "grp_finance_reports",
+      "_type": "request_group",
+      "name": "Reports",
+      "parentId": "grp_finance"
+    },
+    {
+      "_id": "req_finance_reports_food_cost_ratio",
+      "_type": "request",
+      "name": "Food Cost Ratio Report",
+      "parentId": "grp_finance_reports",
+      "method": "GET",
+      "url": "{{ _.base_url }}/api/finance/reports/food-cost-ratio",
+      "headers": [
+        { "name": "Content-Type", "value": "application/json" }
+      ],
+      "body": {}
+    }
+  ]
+}
